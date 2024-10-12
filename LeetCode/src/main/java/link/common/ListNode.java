@@ -44,5 +44,15 @@ public class ListNode {
         }
         return head;
     }
+
+    static ListNode list2link(int[] list) {
+        ListNode head = new ListNode(list[0]);
+        ListNode node = head;
+        for (int i = 1; i < list.length; i++) {
+            node.next = new ListNode(list[i]);
+            node = node.next;
+        }
+        return head;
+    }
 }
 
