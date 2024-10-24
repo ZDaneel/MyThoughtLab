@@ -1,5 +1,6 @@
 package brochure.pool;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 
 import lombok.Getter;
@@ -8,6 +9,7 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -15,6 +17,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author leenadz
  * @since 2024-10-02 10:34
  */
+@Slf4j
 public class ThreadPool {
 
     private final ReentrantLock mainLock = new ReentrantLock();
@@ -40,6 +43,14 @@ public class ThreadPool {
      */
     private final long keepAliveTime;
 
+    private final MyRejectedExecutionHandler handler;
+
+    private final boolean allowCoreThreadTimeOut = false;
+
+    public boolean allowsCoreThreadTimeOut() {
+        return allowCoreThreadTimeOut;
+    }
+
     public ThreadPool(int corePoolSize,
                       int maximumPoolSize,
                       long keepAliveTime,
@@ -49,13 +60,31 @@ public class ThreadPool {
         this.corePoolSize = corePoolSize;
         this.maximumPoolSize = maximumPoolSize;
         this.keepAliveTime = timeUnit.toNanos(keepAliveTime);
+        handler = null;
+    }
+
+    public ThreadPool(int corePoolSize,
+                      int maximumPoolSize,
+                      long keepAliveTime,
+                      TimeUnit timeUnit,
+                      BlockingQueue<Runnable> workQueue,
+                      MyRejectedExecutionHandler handler) {
+        this.workQueue = workQueue;
+        this.corePoolSize = corePoolSize;
+        this.maximumPoolSize = maximumPoolSize;
+        this.keepAliveTime = timeUnit.toNanos(keepAliveTime);
+        this.handler = handler;
+    }
+
+    final void reject(Runnable command) {
+        handler.rejectedExecution(command, this);
     }
 
     public void execute(Runnable task) {
         Assert.assertNotNull("task is null", task);
-
         // 创建核心线程处理任务
         if (workers.size() < corePoolSize) {
+            System.out.println("核心线程启动");
             this.addWorker(task, true);
             return;
         }
@@ -69,7 +98,7 @@ public class ThreadPool {
         // 创建非核心线程处理任务
         if (!this.addWorker(task, false)) {
             // 非核心线程数达到上限，触发拒绝策略
-            throw new RuntimeException("拒绝策略");
+            reject(task);
         }
     }
 
@@ -91,7 +120,7 @@ public class ThreadPool {
                 workerStarted = true;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("addWorker error", e);
         } finally {
             mainLock.unlock();
         }
@@ -100,6 +129,8 @@ public class ThreadPool {
     }
 
     private void runWorker(Worker worker) {
+        log.warn("线程启动" + worker.thread.getName());
+        // 用户创建的task
         Runnable task = worker.getTask();
 
         try {
@@ -112,6 +143,7 @@ public class ThreadPool {
             // 从循环退出来，意味着当前线程是非核心线程，而且需要被销毁
             // Java的线程，既可以指代Thread对象，也可以指代JVM线程，一个Thread对象绑定一个JVM线程
             // 因此，线程的销毁分为两个维度：1.把Thread对象从workers移除 2.JVM线程执行完当前任务，会自然销毁
+            log.warn("线程销毁" + worker.thread.getName());
             workers.remove(worker); // 这里前后应该加锁，否则线程不安全。由于是demo，很多处理比较随意
         }
     }
@@ -124,8 +156,10 @@ public class ThreadPool {
         for (; ; ) {
 
             // 是否需要检测超时：当前线程数超过核心线程
-            boolean timed = workers.size() > corePoolSize;
-
+            boolean timed = allowCoreThreadTimeOut || workers.size() > corePoolSize;
+            System.out.println("timed:" + timed);
+            System.out.println("timedOut:" + timedOut);
+            // 完善只处理非核心线程
             // 需要检测超时 && 已经超时了
             if (timed && timedOut) {
                 return null;
@@ -138,8 +172,10 @@ public class ThreadPool {
                 Runnable r = timed ?
                         workQueue.poll(keepAliveTime, TimeUnit.NANOSECONDS) :
                         workQueue.take();
-                if (r != null)
+                if (r != null) {
+                    log.warn("队列取出");
                     return r;
+                }
                 timedOut = true;
             } catch (InterruptedException retry) {
                 timedOut = false;
@@ -149,6 +185,9 @@ public class ThreadPool {
 
     @Getter
     @Setter
+    // 为什么要用内部类？
+    // 因为Worker是ThreadPool的内部类，Worker的生命周期和ThreadPool是绑定的
+    // Worker是对Runnable的封装
     private class Worker implements Runnable {
         private Thread thread;
         private Runnable task;
@@ -161,6 +200,17 @@ public class ThreadPool {
         @Override
         public void run() {
             runWorker(this);
+        }
+    }
+
+    public static class MyPolicy implements  MyRejectedExecutionHandler {
+
+        public MyPolicy() {
+        }
+
+        @Override
+        public void rejectedExecution(Runnable r, ThreadPool executor) {
+            throw new RuntimeException("任务被拒绝");
         }
     }
 

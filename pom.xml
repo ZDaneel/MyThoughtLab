@@ -11,6 +11,7 @@
   <url>http://maven.apache.org</url>
   <modules>
     <module>JUC</module>
+      <module>Design-Pattern</module>
   </modules>
 
   <properties>
@@ -30,12 +31,6 @@
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <version>1.18.32</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <version>1.4.7</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
