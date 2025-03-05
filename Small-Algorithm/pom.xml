@@ -14,5 +14,67 @@
     <maven.compiler.source>21</maven.compiler.source>
     <maven.compiler.target>21</maven.compiler.target>
   </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.xmlunit</groupId>
+            <artifactId>xmlunit-parent</artifactId>
+            <version>2.6.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.xmlunit</groupId>
+            <artifactId>xmlunit-parent</artifactId>
+            <version>2.6.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.xmlunit</groupId>
+            <artifactId>xmlunit-parent</artifactId>
+            <version>2.6.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.xmlunit</groupId>
+            <artifactId>xmlunit-parent</artifactId>
+            <version>2.6.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.xmlunit</groupId>
+            <artifactId>xmlunit-parent</artifactId>
+            <version>2.6.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.xmlunit</groupId>
+            <artifactId>xmlunit-parent</artifactId>
+            <version>2.6.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.xmlunit</groupId>
+            <artifactId>xmlunit-parent</artifactId>
+            <version>2.6.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.xmlunit</groupId>
+            <artifactId>xmlunit-parent</artifactId>
+            <version>2.6.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.xmlunit</groupId>
+            <artifactId>xmlunit-parent</artifactId>
+            <version>2.6.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.xmlunit</groupId>
+            <artifactId>xmlunit-parent</artifactId>
+            <version>2.6.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.xmlunit</groupId>
+            <artifactId>xmlunit-parent</artifactId>
+            <version>2.6.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.xmlunit</groupId>
+            <artifactId>xmlunit-parent</artifactId>
+            <version>2.6.3</version>
+        </dependency>
+    </dependencies>
 
 </project>
