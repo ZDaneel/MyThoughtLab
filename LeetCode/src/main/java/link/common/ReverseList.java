@@ -11,7 +11,7 @@ public class ReverseList {
         ListNode head = initLinkedList();
         System.out.println(head);
         System.out.println();
-        ListNode listNode = new ReverseList().reverseList(head);
+        ListNode listNode = new ReverseList().reverseList3(head);
         System.out.println(listNode);
     }
 
@@ -42,5 +42,17 @@ public class ReverseList {
         temp = cur.next;
         cur.next = prev;
         return reverse(cur, temp);
+    }
+
+    public ListNode reverseList3(ListNode head) {
+        ListNode prev = null;
+        ListNode cur = head;
+        while (cur != null) {
+            ListNode next = cur.next;
+            cur.next = prev;
+            prev = cur;
+            cur = next;
+        }
+        return prev;
     }
 }

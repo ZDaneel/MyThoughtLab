@@ -10,7 +10,10 @@ public class MinSubArrayLen {
     public static void main(String[] args) {
         int[] nums = {2, 3, 1, 2, 4, 3};
         int target = 7;
-        int res = new MinSubArrayLen().minSubArrayLen(target, nums);
+        // [1,1,1,1,1,1,1,1]
+        int[] nums2 ={1,1,1,1,1,1,1,1};
+        int target2 = 15;
+        int res = new MinSubArrayLen().minSubArrayLen2(target2, nums2);
         System.out.println(res);
     }
 
@@ -48,5 +51,21 @@ public class MinSubArrayLen {
             }
         }
         return length == Integer.MAX_VALUE ? 0 : length;
+    }
+
+    // 滑动窗口解法，核心是前面的部分就用for循环代替即可，核心在于满足要求后，while不断缩小窗口范围
+    public int minSubArrayLen2(int target, int[] nums) {
+        int left = 0;
+        int sum = 0;
+        int min = Integer.MAX_VALUE;
+        for (int right = 0; right < nums.length; right++) {
+            sum += nums[right];
+            while (sum >= target) {
+                int len = right - left + 1;
+                min = Math.min(len, min);
+                sum -= nums[left++];
+            }
+        }
+        return min == Integer.MAX_VALUE? 0 : min;
     }
 }

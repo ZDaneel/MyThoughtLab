@@ -8,6 +8,7 @@ import java.util.Scanner;
  * @since 2024-09-29 09:33
  */
 public class IntervalSum {
+    // 前缀和
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 

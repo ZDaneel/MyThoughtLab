@@ -6,10 +6,10 @@ package link.common;
  */
 public class SwapPairs {
     public static void main(String[] args) {
-//        ListNode head = ListNode.getListNode();
-        ListNode head = new ListNode(1);
+        ListNode head = ListNode.getListNode();
+//        ListNode head = new ListNode(1);
         System.out.println(head);
-        ListNode listNode = new SwapPairs().swapPairs(head);
+        ListNode listNode = new SwapPairs().swapPairs2(head);
         System.out.println(listNode);
     }
 
@@ -54,5 +54,20 @@ public class SwapPairs {
         head.next = newNode;
 
         return next;
+    }
+
+    public ListNode swapPairs2(ListNode head) {
+        ListNode dummyNode = new ListNode();
+        dummyNode.next = head;
+        ListNode cur = dummyNode;
+        while (cur.next != null && cur.next.next != null) {
+            ListNode swapNodeA = cur.next;
+            ListNode swapNodeB = cur.next.next;
+            cur.next = swapNodeB;
+            swapNodeA.next = swapNodeB.next;
+            swapNodeB.next = swapNodeA;
+            cur = cur.next.next;
+        }
+        return dummyNode.next;
     }
 }
