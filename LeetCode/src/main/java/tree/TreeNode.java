@@ -24,6 +24,32 @@ public class TreeNode {
 
     @Override
     public String toString() {
-        return String.valueOf(this.val);
+        return toStringHelper(this, 0);
+    }
+
+    private String toStringHelper(TreeNode node, int level) {
+        if (node == null) {
+            return "null";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        String indent = "  ".repeat(level); // 使用空格进行缩进
+
+        sb.append(indent).append("TreeNode:\n");
+        sb.append(indent).append("  val: ").append(node.val).append("\n");
+        sb.append(indent).append("  left: ").append(toStringHelper(node.left, level + 1)).append("\n");
+        sb.append(indent).append("  right: ").append(toStringHelper(node.right, level + 1)).append("\n");
+
+        return sb.toString();
+    }
+
+    public static void main(String[] args) {
+        TreeNode root = new TreeNode(1);
+        root.left = new TreeNode(2);
+        root.right = new TreeNode(3);
+        root.left.left = new TreeNode(4);
+        root.left.right = new TreeNode(5);
+
+        System.out.println(root.toString());
     }
 }
