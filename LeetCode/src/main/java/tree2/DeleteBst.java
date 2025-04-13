@@ -11,10 +11,17 @@ public class DeleteBst {
     public static void main(String[] args) {
         DeleteBst deleteBst = new DeleteBst();
         Integer[] root1 = {5, 3, 6, 2, 4, null, 7};
-        TreeNode tree1 = TreeTool.buildTree(root1);
-        System.out.println(deleteBst.deleteNode(tree1, 3));
+//        System.out.println(deleteBst.deleteNode(TreeTool.buildTree(root1), 0));
+//        System.out.println("===================");
+//        System.out.println(deleteBst.deleteNode(TreeTool.buildTree(root1), 2));
+//        System.out.println("===================");
+//        System.out.println(deleteBst.deleteNode(TreeTool.buildTree(root1), 4));
+//        System.out.println("===================");
+//        System.out.println(deleteBst.deleteNode(TreeTool.buildTree(root1), 7));
+//        System.out.println("===================");
+//        System.out.println(deleteBst.deleteNode(TreeTool.buildTree(root1), 3));
         System.out.println("===================");
-        System.out.println(deleteBst.deleteNode(tree1, 0));
+        System.out.println(deleteBst.deleteNode(TreeTool.buildTree(root1), 5));
     }
 
     public TreeNode deleteNode(TreeNode root, int key) {
@@ -28,12 +35,13 @@ public class DeleteBst {
             if (root.right == null) {
                 return root.left;
             }
+
             TreeNode leftNode = root.left;
             TreeNode rightNode = root.right;
             while (rightNode.left != null) {
                 rightNode = rightNode.left;
             }
-            rightNode = leftNode;
+            rightNode.left = leftNode;
             return root.right;
         }
 
