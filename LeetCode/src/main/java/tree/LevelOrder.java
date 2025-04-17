@@ -31,7 +31,7 @@ public class LevelOrder {
     public List<List<Integer>> levelOrder(TreeNode root) {
         List<List<Integer>> resList = new ArrayList<>();
         Deque<TreeNode> queue = new LinkedList<>();
-        if (root != null) queue.add(root);
+        if (root != null) queue.offer(root);
         while (!queue.isEmpty()) {
             int size = queue.size();
             List<Integer> levelList = new ArrayList<>();

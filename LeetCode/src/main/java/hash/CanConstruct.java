@@ -28,9 +28,7 @@ public class CanConstruct {
         for (int i = 0; i < ransomNote.length(); i++) {
             char c = ransomNote.charAt(i);
             magArr[(int) c - 'a']--;
-        }
-        for (int count : magArr) {
-            if (count < 0) return false;
+            if (magArr[(int) c - 'a'] < 0) return false;
         }
         return true;
     }

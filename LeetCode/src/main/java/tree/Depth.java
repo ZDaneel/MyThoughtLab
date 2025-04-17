@@ -37,8 +37,22 @@ public class Depth {
         if (node.right != null) getDepth(node.right, curDepth + 1);
     }
 
-
     public int minDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int leftDep = minDepth(root.left);
+        int rightDep = minDepth(root.right);
+        if (root.left == null && root.right != null) {
+            return 1 + rightDep;
+        }
+        if (root.left != null && root.right == null) {
+            return 1 + leftDep;
+        }
+        return 1 + Math.min(leftDep, rightDep);
+    }
+
+    public int minDepth2(TreeNode root) {
         if (root == null) {
             return 0;
         } else {
@@ -64,8 +78,29 @@ public class Depth {
         return leftCount + rightCount + 1;
     }
 
-    public int countNodes(TreeNode root) {
+    public int countNodes3(TreeNode root) {
         if (root == null) return 0;
         return 1 + countNodes(root.left) + countNodes(root.right);
+    }
+
+    public int countNodes(TreeNode root) {
+        if (root == null) return 0;
+        TreeNode left = root.left;
+        TreeNode right = root.right;
+        int leftDep = 0, rightDep = 0;
+        while (left != null) {
+            left = left.left;
+            leftDep++;
+        }
+        while (right != null) {
+            right = right.right;
+            rightDep++;
+        }
+        if (leftDep == rightDep) {
+            return (2 << leftDep) - 1;
+        }
+        int leftTreeNum = countNodes(root.left);
+        int rightTreeNum = countNodes(root.right);
+        return 1 + leftTreeNum + rightTreeNum;
     }
 }

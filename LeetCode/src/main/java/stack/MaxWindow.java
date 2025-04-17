@@ -41,7 +41,11 @@ public class MaxWindow {
             window.add(nums[i]);
             monoQueue.add(nums[i]);
         }
+        System.out.println();
         res[resPos++] = monoQueue.front();
+        System.out.println(window);
+        System.out.println("===============");
+        System.out.println(monoQueue);
         for (int i = k; i < length; i++) {
             int num = nums[i];
             monoQueue.remove(window.remove());
@@ -70,6 +74,13 @@ public class MaxWindow {
 
         int front() {
             return deque.peek();
+        }
+
+        @Override
+        public String toString() {
+            return "MyQueue{" +
+                    "deque=" + deque +
+                    '}';
         }
     }
 

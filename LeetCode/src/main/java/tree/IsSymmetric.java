@@ -82,24 +82,17 @@ public class IsSymmetric {
     public boolean isSymmetric(TreeNode root) {
         Deque<TreeNode> queue = new LinkedList<>();
         if (root.left == null && root.right != null) return false;
-        if (root.left != null) queue.push(root.left);
-        if (root.right != null) queue.push(root.right);
+        if (root.left != null) queue.offer(root.left);
+        if (root.right != null) queue.offer(root.right);
         while (!queue.isEmpty()) {
-            int size = queue.size();
-            if (size % 2 != 0) return false;
-            for (int i = 0; i < size; i = i + 2) {
-                TreeNode left = queue.pop();
-                TreeNode right = queue.pop();
-                if (left == null && right != null) return false;
-                if (left != null && right == null) return false;
-                if (left != null) {
-                    if (left.val != right.val) return false;
-                    queue.push(left.left);
-                    queue.push(right.right);
-                    queue.push(left.right);
-                    queue.push(right.left);
-                }
-            }
+            TreeNode left = queue.poll();
+            TreeNode right = queue.poll();
+            if (left == null && right == null) continue;
+            if (left == null || right == null || left.val != right.val) return false;
+            queue.push(left.left);
+            queue.push(right.right);
+            queue.push(left.right);
+            queue.push(right.left);
         }
         return true;
     }
