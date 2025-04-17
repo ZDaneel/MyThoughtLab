@@ -1,6 +1,7 @@
 package backtrack;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -12,16 +13,41 @@ public class CombinationSum {
         CombinationSum combinationSum = new CombinationSum();
         System.out.println(combinationSum.combinationSum3(3, 7));
         System.out.println(combinationSum.combinationSum3(3, 9));
-
     }
 
+    LinkedList<Integer> path = new LinkedList<>();
+    List<List<Integer>> ans = new ArrayList<>();
     public List<List<Integer>> combinationSum3(int k, int n) {
+        build(k, n, 1, 0);
+        return ans;
+    }
+
+    private void build(int k, int n, int startIndex, int sum) {
+        if (sum > n) return;
+
+        if (path.size() > k) return;
+
+        if (sum == n && path.size() == k) {
+            ans.add(new ArrayList<>(path));
+            return;
+        }
+
+        for(int i = startIndex; i <= 9; i++) {
+            path.add(i);
+            sum += i;
+            build(k, n, i + 1, sum);
+            sum -= i;
+            path.removeLast();
+        }
+    }
+
+    public List<List<Integer>> combinationSum32(int k, int n) {
         List<List<Integer>> resList = new ArrayList<>();
         List<Integer> path = new ArrayList<>();
-        return findSum3(k, n, 0, path, resList);
+        return findSum32(k, n, 0, path, resList);
     }
 
-    public List<List<Integer>> findSum3(int k, int n, int index, List<Integer> path, List<List<Integer>> resList) {
+    public List<List<Integer>> findSum32(int k, int n, int index, List<Integer> path, List<List<Integer>> resList) {
         if (path.size() == k) {
             if (0 == n) {
                 resList.add(new ArrayList<>(path));
@@ -34,7 +60,7 @@ public class CombinationSum {
                 int num = i + 1;
                 path.add(num);
                 n -= num;
-                findSum3(k, n, num, path, resList);
+                findSum32(k, n, num, path, resList);
                 path.removeLast();
                 n += num;
             }
