@@ -22,9 +22,28 @@ public class IsValidBst {
         System.out.println(isValidBst.isValidBST(tree2));
     }
 
+    public boolean isValidBST(TreeNode root) {
+        return isValidBST(root, Long.MIN_VALUE, Long.MAX_VALUE);
+    }
+
+    private boolean isValidBST(TreeNode node, long lowerBound, long upperBound) {
+        if (node == null) {
+            return true;
+        }
+
+        // 检查当前节点的值是否在有效范围内
+        if (node.val <= lowerBound || node.val >= upperBound) {
+            return false;
+        }
+
+        // 递归检查
+        return isValidBST(node.left, lowerBound, node.val) &&
+                isValidBST(node.right, node.val, upperBound);
+    }
+
     long max = Long.MIN_VALUE;
 
-    public boolean isValidBST(TreeNode root) {
+    public boolean isValidBST3(TreeNode root) {
         max = Long.MIN_VALUE;
         return judge(root);
     }

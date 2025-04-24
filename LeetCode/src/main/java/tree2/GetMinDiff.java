@@ -18,7 +18,6 @@ public class GetMinDiff {
         TreeNode tree2 = TreeTool.buildTree(root2);
         System.out.println(getMinDiff.getMinimumDifference(tree2));
     }
-
     int min = Integer.MAX_VALUE;
     TreeNode pre;
 
@@ -39,6 +38,7 @@ public class GetMinDiff {
         pre = root;
         traversal(root.right);
     }
+
 
     public int getMinimumDifferenceErr(TreeNode root) {
         int diff = Integer.MAX_VALUE;
